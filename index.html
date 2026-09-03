@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bondok Website — Project Hub</title>
+<style>
+  :root {
+    --orange: #dd8226; --orange-soft: #e09344; --orange-bg: #fdf3e7;
+    --ink: #1a1a1a; --muted: #6b6560; --bg: #f7f3ed; --card: #ffffff;
+    --green: #2e9e44; --green-bg: #e6f6ea;
+    --blue: #2563eb; --blue-bg: #e8effc;
+    --red: #d64545; --red-bg: #fdeaea;
+    --grey-bg: #efece8;
+    --border: #e5dfd7;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.65;
+  }
+  header.cover {
+    background: #161311; color: #fff; text-align: center; padding: 56px 24px 48px;
+  }
+  header .brand { color: var(--orange-soft); font-size: 34px; font-weight: 800; letter-spacing: .5px; }
+  header .sub { color: #c9c2ba; margin-top: 6px; font-size: 15px; }
+  header .meta { color: #8f8880; margin-top: 18px; font-size: 13px; }
+  header .badge {
+    display: inline-block; border: 1px solid #4a443e; border-radius: 20px;
+    padding: 5px 18px; font-size: 12.5px; color: #ddd6cd; margin-top: 16px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 36px 22px 60px; }
+  nav.toc {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 22px; margin-bottom: 34px; font-size: 14.5px;
+  }
+  nav.toc strong { display: block; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  nav.toc a { color: var(--orange); text-decoration: none; font-weight: 600; }
+  nav.toc a:hover { text-decoration: underline; }
+  nav.toc li { margin-bottom: 4px; }
+  h2 {
+    font-size: 22px; margin: 44px 0 6px; padding-bottom: 8px;
+    border-bottom: 3px solid var(--orange);
+  }
+  h2 .num { color: var(--orange); margin-right: 6px; }
+  .lead { color: var(--muted); font-size: 14.5px; margin-bottom: 16px; }
+  h3 { font-size: 16.5px; margin: 24px 0 8px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 22px; margin: 14px 0;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  th { text-align: left; font-size: 12.5px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); padding: 8px 10px; border-bottom: 2px solid var(--border); }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .tag {
+    display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 20px;
+    padding: 2px 11px; white-space: nowrap;
+  }
+  .t-done    { background: var(--green-bg); color: var(--green); }
+  .t-prog    { background: var(--orange-bg); color: var(--orange); }
+  .t-todo    { background: var(--grey-bg);  color: #5d574f; }
+  .t-blocked { background: var(--red-bg);   color: var(--red); }
+  .t-client  { background: var(--blue-bg);  color: var(--blue); }
+  .t-wait    { background: #f5eeda; color: #8a6d1a; }
+  ul.check { list-style: none; padding-left: 4px; }
+  ul.check li { padding-left: 26px; position: relative; margin-bottom: 7px; font-size: 14.5px; }
+  ul.check li::before {
+    content: ""; position: absolute; left: 0; top: 5px; width: 14px; height: 14px;
+    border: 2px solid var(--orange); border-radius: 4px;
+  }
+  ul.check li.done::before { background: var(--green); border-color: var(--green); }
+  ul.check li.done::after {
+    content: "✓"; position: absolute; left: 3px; top: 1px; color: #fff; font-size: 11px; font-weight: 800;
+  }
+  ul.check li.done { color: var(--muted); }
+  .callout {
+    border-left: 4px solid var(--orange); background: var(--orange-bg);
+    border-radius: 8px; padding: 13px 17px; margin: 14px 0; font-size: 14px;
+  }
+  .callout.red   { border-left-color: var(--red);   background: var(--red-bg); }
+  .callout.blue  { border-left-color: var(--blue);  background: var(--blue-bg); }
+  .callout.green { border-left-color: var(--green); background: var(--green-bg); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+  .small { font-size: 13px; color: var(--muted); }
+  footer { text-align: center; color: var(--muted); font-size: 13px; padding: 30px 20px 40px; }
+  code { background: var(--grey-bg); border-radius: 5px; padding: 1px 7px; font-size: 13px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 4px; }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="brand">Bondok Fried Chicken — Website Project Hub</div>
+  <div class="sub">Status board · TODO · dependencies · client requirements — the single reference we work from</div>
+  <div class="badge">Stellar Vision · Scope Reference Edition</div>
+  <div class="meta">Design direction: layout & UX patterns adapted from the popeyes.com reference, fully rebranded to Bondok identity (colors, imagery, content).</div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#status">Current status — what is already done</a></li>
+    <li><a href="#todo-fe">Our TODO — front-end (no dependencies, we can start now)</a></li>
+    <li><a href="#todo-be">Our TODO — backend we handle ourselves</a></li>
+    <li><a href="#blocked">Blocked until Cloud Kitchen / POS API is provided</a></li>
+    <li><a href="#client">What we need FROM the client (request list)</a></li>
+    <li><a href="#tracking">Tracking & analytics scope</a></li>
+    <li><a href="#phases">Delivery phases</a></li>
+    <li><a href="#excluded">Explicitly out of scope</a></li>
+    <li><a href="#policies">Delivery, maintenance & revision policy</a></li>
+  </ol>
+</nav>
+
+<div class="legend">
+  <span class="tag t-done">DONE</span>
+  <span class="tag t-prog">IN PROGRESS</span>
+  <span class="tag t-todo">TODO</span>
+  <span class="tag t-blocked">BLOCKED — needs API</span>
+  <span class="tag t-client">CLIENT PROVIDES</span>
+  <span class="tag t-wait">AWAITING CONFIRMATION</span>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="status"><span class="num">1.</span> Current Status — Already Done</h2>
+<p class="lead">Completed and verifiable right now on the local dev build.</p>
+
+<div class="card">
+<table>
+  <tr><th>Item</th><th>Status</th><th>Notes</th></tr>
+  <tr><td>Reference capture of popeyes.com (pixel-measured layouts, 41 template pages, both desktop &amp; mobile)</td><td><span class="tag t-done">DONE</span></td><td>Internal reference only — never published</td></tr>
+  <tr><td>Homepage front-end — structure, responsive desktop + mobile</td><td><span class="tag t-done">DONE</span></td><td>Measured-exact hero carousel geometry</td></tr>
+  <tr><td>Homepage rebranded to Bondok (logo, name, copy, real product photos)</td><td><span class="tag t-done">DONE</span></td><td>All Popeyes text/branding removed</td></tr>
+  <tr><td>Hero carousel — coverflow, autoplay, circular wrap animation, pause/dots/arrows, keyboard</td><td><span class="tag t-done">DONE</span></td><td>Geometry matched to reference at 1440/1680/1920px</td></tr>
+  <tr><td>Order Pickup / Delivery popups (map view + address view) with open/close animations</td><td><span class="tag t-done">DONE</span></td><td>UI only — no real branch/address logic yet</td></tr>
+  <tr><td>Hamburger drawer (Rewards panel style), mobile bottom tab bar</td><td><span class="tag t-done">DONE</span></td><td></td></tr>
+  <tr><td>Brand font replaced with licensed free font (Baloo 2)</td><td><span class="tag t-done">DONE</span></td><td>No proprietary fonts shipped</td></tr>
+  <tr><td>Provisional brand palette extracted from logo (#E09344 golden orange + black)</td><td><span class="tag t-wait">AWAITING CONFIRMATION</span></td><td><strong>Not final</strong> — waiting on client brand guide</td></tr>
+  <tr><td>Product photo library inventoried — 8 menu categories, ~70 products</td><td><span class="tag t-done">DONE</span></td><td>Photos are 1.5–2.5&nbsp;MB each — compression pass pending</td></tr>
+  <tr><td>Local dev server + navigable reference site</td><td><span class="tag t-done">DONE</span></td><td></td></tr>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="todo-fe"><span class="num">2.</span> Our TODO — Front-End (no external dependencies)</h2>
+<p class="lead">Everything here can be built now with data we already have or with stub data, then wired to the real API later.</p>
+
+<div class="card">
+<h3>Pages</h3>
+<ul class="check">
+  <li>Menu page — 8 real categories, full product grid (~70 products with photos)</li>
+  <li>Product detail page — photos, description, price, variants</li>
+  <li>Product customization UI — extra cheese, meal size, sauce selection, paid add-ons, automatic price calculation</li>
+  <li>Offers page</li>
+  <li>Branches page — all 11 branches (cards UI; live data comes later from client)</li>
+  <li>Reviews page (will display Google Reviews once access is provided)</li>
+  <li>Video reviews section</li>
+  <li>FAQ page</li>
+  <li>Complaints &amp; Suggestions page (form)</li>
+  <li>Terms / Privacy / Offer terms / Delivery terms pages (texts needed from client)</li>
+</ul>
+<h3>Ordering experience</h3>
+<ul class="check">
+  <li>Sticky cart (persistent while browsing) + sticky order button</li>
+  <li>Cart drawer / bag page</li>
+  <li>Checkout flow UI: phone → OTP → delivery address → payment → confirmation (stubbed until gateways provided; no traditional account, no password, no unnecessary forms)</li>
+  <li>Smart search inside the menu</li>
+  <li>Categories &amp; product filters</li>
+  <li>Favorite meals (local until backend)</li>
+  <li>Recently viewed products</li>
+</ul>
+<h3>Conversion / AOV system (front-end part)</h3>
+<ul class="check">
+  <li>Smart upselling prompts</li>
+  <li>Cross-selling (related products)</li>
+  <li>Combo recommendations + "Upgrade to Combo"</li>
+  <li>"Frequently bought together" block</li>
+  <li>Free-delivery progress bar</li>
+  <li>Free gift at spend threshold</li>
+  <li>"Golden triangle" placement of top-margin combos on mobile</li>
+  <li>Menu ordered per e-commerce best practices, high-margin items highlighted</li>
+</ul>
+<h3>Site-wide</h3>
+<ul class="check">
+  <li>Sticky call button (click-to-call) + sticky WhatsApp button</li>
+  <li>Direct product links — unique URL per product / combo / offer / category so ads can open them directly (deep-link equivalent for web)</li>
+  <li>SEO-friendly URLs, meta tags, general performance pass</li>
+  <li>Image compression/optimization pass on all product photos (manual, per policy)</li>
+  <li>Apply final brand palette once client confirms brand guide</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="todo-be"><span class="num">3.</span> Our TODO — Backend We Handle Ourselves</h2>
+<p class="lead">Built by us on our stack, independent of the client's systems. Where the Cloud Kitchen API is involved we build against a <strong>mock adapter</strong> now and swap in the real API when access arrives.</p>
+
+<div class="card">
+<ul class="check">
+  <li>Database &amp; product catalog schema (products, variants, add-ons, categories, branches, orders, customers)</li>
+  <li>Cart &amp; order engine (pricing, add-ons calculation, order lifecycle)</li>
+  <li>Admin dashboard shell — the panel that hosts CMS, CRM, and analytics</li>
+  <li><strong>CMS</strong> (marketing team self-service): edit main-menu &amp; footer links · manage hero slides (image + link) · product data (name, price, description, variants, show/hide, direct price discounts) · reorder products / featured items · view orders data (best sellers, total sales, conversion rate, sessions, order count) · view customer data (contact info, per-customer order history)</li>
+  <li><strong>CRM</strong>: store customer data + phone numbers, order history per customer, export for future marketing campaigns</li>
+  <li><strong>Analytics dashboard</strong> (details in §6): sales, products, marketing, branch performance</li>
+  <li>OTP login flow implementation (ready to plug into the SMS gateway the moment it's subscribed)</li>
+  <li>Payment integration layer (ready to plug into the client-provided gateway; supports sandbox first)</li>
+  <li>Mock Cloud-Kitchen API adapter — mirrors the interface we expect (Foodics / Matrix compatible shape) so ALL blocked features below can be developed and demoed before real access</li>
+  <li>Server-side tracking events (Meta CAPI, TikTok Events API) — scaffolding now, live keys later</li>
+  <li>Reviews fetch job (Google Reviews) — ready for the client's place IDs</li>
+  <li>WhatsApp notification templates &amp; sender module — ready for WhatsApp Business API credentials</li>
+</ul>
+</div>
+
+<div class="callout">
+<strong>Why the mock adapter matters:</strong> it means API unavailability never blocks development. We build and demo everything against realistic fake data; connecting the real Cloud Kitchen API becomes a wiring task, not a rebuild.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="blocked"><span class="num">4.</span> Blocked Until Cloud Kitchen / POS API Is Provided</h2>
+<p class="lead">These items <strong>cannot go live</strong> (and some cannot be fully verified) until the client provides API access to their cashier / Cloud Kitchen system. Per the agreed scope: any data or function not exposed by the current API is out of the current scope and priced separately if the provider adds it later.</p>
+
+<div class="card">
+<table>
+  <tr><th>Feature</th><th>What the API must expose</th></tr>
+  <tr><td>Menu per branch (different menu for each of the 11 branches)</td><td>Multi-branch menus endpoint. If not supported → one unified menu for all branches (fallback agreed in scope)</td></tr>
+  <tr><td>Live product availability / sold-out states</td><td>Product availability endpoint</td></tr>
+  <tr><td>Live prices &amp; discounts sync</td><td>Prices + discounts endpoints</td></tr>
+  <tr><td>Inventory sync</td><td>Inventory endpoint</td></tr>
+  <tr><td>Order submission routed automatically to the right branch</td><td>Order-create endpoint (branch-aware)</td></tr>
+  <tr><td>Order status updates (confirmed → preparing → out for delivery → delivered)</td><td>Order-status endpoint or webhooks</td></tr>
+  <tr><td>WhatsApp automatic status notifications</td><td>Order status (above) + WhatsApp Business API</td></tr>
+  <tr><td>Driver tracking link sent to customer</td><td>Driver tracking URL from the POS/delivery system, if the provider supports live driver tracking</td></tr>
+  <tr><td>Delivery fees per branch/zone shown at checkout</td><td>Delivery fees data</td></tr>
+  <tr><td>Delivery coverage areas (and blocking checkout outside coverage)</td><td>Coverage zones data</td></tr>
+  <tr><td>Estimated delivery time</td><td>ETA data</td></tr>
+  <tr><td>Quick reorder (repeat a past order in one tap)</td><td>API must accept this order type</td></tr>
+  <tr><td>Scheduled orders (order now, deliver later)</td><td>API must accept scheduled orders</td></tr>
+  <tr><td>Analytics accuracy for sales & order statuses in our dashboard</td><td>Depends on quality/completeness of the data the API returns</td></tr>
+</table>
+</div>
+
+<div class="callout red">
+<strong>Critical dependency:</strong> the site will NOT create its own branch-management or cloud-kitchen system — it integrates with the client's existing one. API access + documentation is the single biggest external dependency of this project.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="client"><span class="num">5.</span> What We Need FROM the Client — Request List</h2>
+<p class="lead">Per management: the payment gateway and the Cloud Kitchen system are <strong>provided by the client, not by us</strong>. This is the concrete list to send them. Execution starts after the proposal is approved and these are delivered.</p>
+
+<div class="grid2">
+<div class="card">
+<h3>🔌 Cloud Kitchen / POS system <span class="tag t-client">CLIENT PROVIDES</span></h3>
+<ul class="check">
+  <li>Which system are they on? (Foodics, Matrix, or other — both named as integration targets in scope)</li>
+  <li>API documentation + API credentials (key/token) for a test AND production environment</li>
+  <li>Confirmation of which endpoints exist (checklist in §4: branch menus, availability, prices, discounts, inventory, order create, order status/webhooks, delivery zones/fees/ETA, driver tracking, scheduled &amp; reorder support)</li>
+  <li>A technical contact at the POS provider for integration questions</li>
+</ul>
+</div>
+<div class="card">
+<h3>💳 Payment gateway <span class="tag t-client">CLIENT PROVIDES</span></h3>
+<ul class="check">
+  <li>Which gateway/provider (their merchant account — not ours)</li>
+  <li>Sandbox/test credentials, then production keys</li>
+  <li>Payment methods to enable (card, mobile wallet, cash on delivery)</li>
+  <li>Refund/void policy to reflect in the order flow</li>
+</ul>
+</div>
+<div class="card">
+<h3>📱 SMS gateway (OTP) <span class="tag t-client">CLIENT PROVIDES</span></h3>
+<ul class="check">
+  <li>Subscription with an SMS gateway provider (required for phone + OTP login per scope)</li>
+  <li>Sender name registration + API credentials</li>
+</ul>
+</div>
+<div class="card">
+<h3>💬 WhatsApp Business API <span class="tag t-client">CLIENT PROVIDES</span></h3>
+<ul class="check">
+  <li>WhatsApp Business API account (for automatic order notifications)</li>
+  <li>Per-branch WhatsApp numbers (for the sticky contact buttons)</li>
+</ul>
+</div>
+<div class="card">
+<h3>📣 Ad & analytics accounts <span class="tag t-client">CLIENT PROVIDES</span></h3>
+<ul class="check">
+  <li>Meta Business Manager access (Pixel + Conversions API)</li>
+  <li>TikTok Ads account access (Pixel + Events API)</li>
+  <li>Google account access: GA4 property, Google Tag Manager, Google Ads (Enhanced Conversions)</li>
+  <li>Microsoft Clarity — we can create under their account</li>
+</ul>
+</div>
+<div class="card">
+<h3>🏪 Branch & business data <span class="tag t-client">CLIENT PROVIDES</span></h3>
+<ul class="check">
+  <li>The 11 branches: addresses + map coordinates, hotline per branch, WhatsApp per branch, working hours</li>
+  <li>Delivery areas, fees, ETA per branch (or confirmation this comes from the POS API)</li>
+  <li>Google Business Profile access / place IDs (to display Google Reviews)</li>
+</ul>
+</div>
+<div class="card">
+<h3>🎨 Brand & content <span class="tag t-client">CLIENT PROVIDES</span></h3>
+<ul class="check">
+  <li><strong>Official brand guide / color confirmation</strong> (current palette is provisional, extracted from the logo)</li>
+  <li>Full menu data: product names, descriptions, prices, variants, add-on prices (photos already received)</li>
+  <li>Legal texts: terms of service, privacy policy, offer terms, delivery terms</li>
+  <li>FAQ content + any video review files</li>
+</ul>
+</div>
+<div class="card">
+<h3>🌐 Infrastructure <span class="tag t-client">CLIENT PROVIDES</span></h3>
+<ul class="check">
+  <li>Domain name (or delegation to point DNS)</li>
+  <li>Hosting decision/approval (we can recommend and manage)</li>
+  <li>Google Maps API billing account (map display on branches page)</li>
+</ul>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="tracking"><span class="num">6.</span> Tracking & Analytics Scope</h2>
+<p class="lead">Full implementation, testing, and verification of all tracking systems is in scope — once the accounts above are provided.</p>
+
+<div class="grid2">
+<div class="card">
+<h3>Tracking systems</h3>
+<ul class="check">
+  <li>Meta Pixel</li>
+  <li>Meta Conversions API (server-side)</li>
+  <li>TikTok Pixel</li>
+  <li>TikTok Events API (server-side)</li>
+  <li>Google Analytics 4 (GA4)</li>
+  <li>Google Tag Manager (GTM)</li>
+  <li>Google Enhanced Conversions</li>
+  <li>Microsoft Clarity</li>
+</ul>
+</div>
+<div class="card">
+<h3>Events tracked</h3>
+<ul class="check">
+  <li>Page View · View Content · Search</li>
+  <li>Add to Cart · Initiate Checkout · Purchase</li>
+  <li>Click to Call · Click to WhatsApp</li>
+</ul>
+<p class="small">Purchase event payload: order value, currency, Order ID, Branch ID, order type (delivery/pickup), UTM parameters.</p>
+</div>
+</div>
+
+<div class="card">
+<h3>Analytics dashboard sections</h3>
+<div class="grid2">
+<div>
+  <strong>Sales</strong>
+  <ul class="check"><li>Orders count</li><li>Revenue</li><li>Average order value (AOV)</li><li>Conversion rate (CVR)</li><li>ROAS</li></ul>
+  <strong>Products</strong>
+  <ul class="check"><li>Top sellers</li><li>Lowest sellers</li><li>Upsell revenue</li><li>Add-ons revenue</li></ul>
+</div>
+<div>
+  <strong>Marketing</strong>
+  <ul class="check"><li>Sessions</li><li>Traffic sources</li><li>Campaign performance</li><li>UTM performance</li><li>New vs. returning customers</li></ul>
+  <strong>Branch performance</strong>
+  <ul class="check"><li>Revenue per branch</li><li>Orders per branch</li><li>CVR per branch</li></ul>
+</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="phases"><span class="num">7.</span> Delivery Phases</h2>
+<div class="card">
+<table>
+  <tr><th>Phase</th><th>Contents</th><th>Status</th></tr>
+  <tr><td><strong>Phase 1</strong></td><td>UI design · UX design · menu structure</td><td><span class="tag t-prog">IN PROGRESS</span> — homepage designed &amp; approved-ready; menu structure mapped from the 8 categories</td></tr>
+  <tr><td><strong>Phase 2</strong></td><td>Full customer front-end (smart ordering experience, AOV system, branch management UI)</td><td><span class="tag t-prog">IN PROGRESS</span> — homepage complete; remaining pages listed in §2</td></tr>
+  <tr><td><strong>Phase 3</strong></td><td>Dashboard (CRM, CMS, analytics) · all POS integrations · full tracking system</td><td><span class="tag t-todo">TODO</span> — mock-adapter work can start; live wiring <span class="tag t-blocked">BLOCKED — needs API</span></td></tr>
+  <tr><td><strong>Phase 4</strong></td><td>Final testing · performance review · tracking data verification · launch</td><td><span class="tag t-todo">TODO</span></td></tr>
+</table>
+</div>
+<div class="callout blue">
+Execution officially starts after proposal approval and delivery of: all data, all access permissions (including the Cloud Kitchen API), and the required ad accounts (Google / TikTok / Meta).
+</div>
+
+<!-- ============================================================ -->
+<h2 id="excluded"><span class="num">8.</span> Explicitly OUT of Scope</h2>
+<p class="lead">Agreed exclusions — anything here that gets requested later is a separate scoped/priced item.</p>
+<div class="card">
+<ul class="check">
+  <li>Ad campaign management</li>
+  <li>Product photography &amp; menu photography</li>
+  <li>Specialized marketing copywriting</li>
+  <li>Standalone landing-pages builder package for the marketing team</li>
+  <li>Mobile-app deep linking (no mobile app in scope; web product/category/offer URLs ARE included at no extra cost)</li>
+  <li>Guaranteed load-time commitment (e.g. under 2.5s) — performance depends on hosting, network, third parties</li>
+  <li>Automatic image/video compression system (media optimized manually as part of content prep)</li>
+  <li>Future systems: loyalty program, referral, push notifications, SMS/email marketing, marketing automation, mobile app — all separate future projects</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="policies"><span class="num">9.</span> Delivery, Maintenance & Revisions</h2>
+<div class="grid2">
+<div class="card">
+<h3>On delivery, client receives</h3>
+<ul class="check">
+  <li>Full technical documentation of the platform</li>
+  <li>Full access to the website source code</li>
+</ul>
+<p class="small">Client remains free to use any other developer/team for future changes — no technical lock-in to us.</p>
+</div>
+<div class="card">
+<h3>Optional maintenance service covers</h3>
+<ul class="check">
+  <li>Meal updates · photo updates · price updates</li>
+  <li>Adding offers · content monitoring</li>
+</ul>
+<p class="small">Does NOT include code or design changes.</p>
+</div>
+</div>
+<div class="callout">
+<strong>Revision policy:</strong> one revision round after the first version is presented. Any additional revisions or out-of-scope requests are priced separately.
+</div>
+
+<div class="callout green">
+<strong>Working agreement (us, internal):</strong> this page is the single source of truth. Before starting any task, check it here; after finishing, update its status here. Anything a stakeholder asks for that isn't on this page gets added here first, tagged, and only then worked on.
+</div>
+
+</div>
+
+<footer>
+  Bondok Fried Chicken × Stellar Vision — internal project hub · Palette shown across our builds is provisional until the client confirms the brand guide.
+</footer>
+
+</body>
+</html>
