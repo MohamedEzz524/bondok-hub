@@ -74,6 +74,8 @@
     content: "✓"; position: absolute; left: 3px; top: 1px; color: #fff; font-size: 11px; font-weight: 800;
   }
   ul.check li.done { color: var(--muted); }
+  .needs { display: block; font-size: 12.5px; color: #8a6d1a; font-weight: 600; margin-top: 1px; }
+  .needs::before { content: "⚙ still needs: "; }
   .callout {
     border-left: 4px solid var(--orange); background: var(--orange-bg);
     border-radius: 8px; padding: 13px 17px; margin: 14px 0; font-size: 14px;
@@ -147,8 +149,9 @@
 <div class="card">
 <h3>Pages</h3>
 <ul class="check">
-  <li class="done">Menu page — 8 real categories, full product grid (62 products with photos)</li>
-  <li class="done">Product detail popup — photo, description, variants, quantity (prices/descriptions fill in with client menu data)</li>
+  <li class="done">Menu page — 8 real categories, full product grid (62 products with photos)<span class="needs">prices &amp; descriptions (client menu data)</span></li>
+  <li class="done">A dedicated page for EVERY product with its own URL (62 pages) — ads &amp; search engines land directly on products, with correct link previews<span class="needs">final domain to lock canonical URLs</span></li>
+  <li class="done">Product detail popup — photo, description, variants, quantity (prices/descriptions fill in with client menu data)<span class="needs">descriptions &amp; prices (client menu data)</span></li>
   <li>Product customization UI — extra cheese, meal size, sauce selection, paid add-ons, automatic price calculation</li>
   <li>Offers page</li>
   <li>Branches page — all 11 branches (cards UI; live data comes later from client)</li>
@@ -160,11 +163,11 @@
 </ul>
 <h3>Ordering experience</h3>
 <ul class="check">
-  <li class="done">Sticky cart (persistent while browsing) + sticky order button</li>
-  <li class="done">Cart drawer / bag page</li>
-  <li class="done">Checkout flow UI: phone → OTP → delivery address → payment → confirmation (stubbed until gateways provided; no traditional account, no password, no unnecessary forms)</li>
-  <li class="done">Smart search inside the menu</li>
-  <li class="done">Categories &amp; product filters</li>
+  <li class="done">Sticky cart (persistent while browsing) + sticky order button<span class="needs">server-side cart sync once phone accounts go live</span></li>
+  <li class="done">Cart drawer / bag page<span class="needs">delivery fee line once branch data / POS API is connected</span></li>
+  <li class="done">Checkout flow UI: phone → OTP → delivery address → payment → confirmation (stubbed until gateways provided; no traditional account, no password, no unnecessary forms)<span class="needs">SMS gateway (real OTP) · payment gateway · order submission to POS API · coverage check + delivery fees · final payment methods confirmation from client</span></li>
+  <li class="done">Smart search inside the menu<span class="needs">server-side logging of zero-result searches (with backend)</span></li>
+  <li class="done">Categories &amp; product filters<span class="needs">price filter auto-activates once prices arrive</span></li>
   <li>Favorite meals (local until backend)</li>
   <li>Recently viewed products</li>
 </ul>
@@ -184,7 +187,7 @@
   <li>Sticky call button (click-to-call) + sticky WhatsApp button</li>
   <li>Direct product links — unique URL per product / combo / offer / category so ads can open them directly (deep-link equivalent for web)</li>
   <li>SEO-friendly URLs, meta tags, general performance pass</li>
-  <li class="done">Image compression/optimization pass on all product photos (manual, per policy)</li>
+  <li class="done">Image compression/optimization pass on all product photos (manual, per policy)<span class="needs">re-run for any new photos the client sends</span></li>
   <li>Apply final brand palette once client confirms brand guide</li>
 </ul>
 </div>
